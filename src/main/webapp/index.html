@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-store" />
+</head>
+<script type="text/javascript" src="lazywebsocket.js"></script>
+<script>
+	var url = "ws://localhost:48080/example-websockets//time";
+	var socket = new LazyWebSocket(url);
+
+	socket.onmessage = function(msg) {
+		var element = document.getElementById('panel');
+		element.innerText = msg.data;
+	}
+	socket.onclose = function() {
+		var element = document.getElementById('panel');
+		element.innerText = "Socket closed, please press open to re-open.";
+	}
+
+	function connect() {
+		socket.open();
+	}
+
+	function disconnect() {
+		socket.close();
+	}
+
+	function send() {
+		var element = document.getElementById('message');
+		socket.send(element.value);
+	}
+</script>
+<body>
+	<div>
+		<h3>Open the socket to see the time...</h3>
+		<button onclick="connect()">Open</button>
+		<button onclick="disconnect()">Close</button>
+		<span id="panel">Press open to open socket...</span>
+	</div>
+	<div>
+		<h3>Once socket is open you can send messages down it</h3>
+		<textarea id="message"></textarea>
+		<button onclick="send()">Send</button>
+	</div>
+</body>
+</html>
